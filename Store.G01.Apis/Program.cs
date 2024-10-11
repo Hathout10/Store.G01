@@ -65,7 +65,6 @@ namespace Store.G01.Apis
 				app.UseSwagger();
 				app.UseSwaggerUI();
 			}
-
 			app.UseHttpsRedirection();
 
 			app.UseAuthorization();
