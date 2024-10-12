@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Store.G01.Core.Entites;
 using Store.G01.Core.RepostitoriesContract;
+using Store.G01.Core.Specifications;
 using Store.G01.Repository.Data.Contexts;
 using System;
 using System.Collections.Generic;
@@ -51,7 +52,20 @@ namespace Store.G01.Repository.Repositores
 			_context.Remove(entity);
 		}
 
+		public async Task<IEnumerable<TEntity>> GetAllWithSpecAsync(ISpecifications<TEntity, TKey> spec)
+		{
+			return await ApplySpecification(spec).ToListAsync();
+		}
 
+		public async Task<TEntity> GetWithSpecAsync(ISpecifications<TEntity, TKey> spec)
+		{
+			return await ApplySpecification(spec).FirstOrDefaultAsync();
+		}
+
+		private IQueryable<TEntity> ApplySpecification(ISpecifications<TEntity, TKey> spec)
+		{
+			return SpecificationEvaluator<TEntity, TKey>.GetQuery(_context.Set<TEntity>(), spec);
+		}
 
 	}
 }
