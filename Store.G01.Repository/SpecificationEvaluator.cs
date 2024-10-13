@@ -20,6 +20,16 @@ namespace Store.G01.Repository
 				query=query.Where(spec.Criteria);
 			}
 
+			if(spec.OrderBy is not null)
+			{
+				query = query.OrderBy(spec.OrderBy);
+			}
+			
+			if(spec.OrderByDesc is not null)
+			{
+				query = query.OrderByDescending(spec.OrderByDesc);
+			}
+
 			query = spec.Include.Aggregate(query, (current, include) => current.Include(include));
 
 			return query;
