@@ -14,9 +14,30 @@ namespace Store.G01.Core.Specifications.ProductS
 			ApplyIncluds();
 
 		}
-        public ProductSpecification()
+        public ProductSpecification(string? sort)
         {
+			if(!string.IsNullOrEmpty(sort))
+			{
+				switch (sort.ToLower())
+				{
+					case "priceasc":
+						AddOrderBy( p=>p.Price);
+						break;
+					case "pricedesc":
+						AddOrderByDescinding( p=>p.Price);
+						break;
+					default:
+						AddOrderBy(p => p.Name);
+						break;
+				}
+			}
+			else
+			{
+				AddOrderBy(p => p.Name);
+
+			}
 			ApplyIncluds();
+
 
 		}
 

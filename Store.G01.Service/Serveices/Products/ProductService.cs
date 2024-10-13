@@ -23,9 +23,11 @@ namespace Store.G01.Service.Serveices.Products
 			_unitOfWork = unitOfWork;
 			_mapper = mapper;
 		}
-		public async Task<IEnumerable<ProductDto>> GetAllProductsAsync()
+		public async Task<IEnumerable<ProductDto>> GetAllProductsAsync(string? sort)
 		{
-			var spec = new ProductSpecification();
+
+
+			var spec = new ProductSpecification(sort);
 			var products= await _unitOfWork.Repository<Product, int>().GetAllWithSpecAsync(spec);
 			return _mapper.Map<IEnumerable<ProductDto>>(products);
 

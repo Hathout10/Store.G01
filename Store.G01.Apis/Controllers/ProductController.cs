@@ -16,9 +16,10 @@ namespace Store.G01.Apis.Controllers
 		}
 
         [HttpGet] //Get BaseUrl/api/Products
-		public async Task<IActionResult> GetAllProducts() //endpoint
+		public async Task<IActionResult> GetAllProducts([FromQuery]string? sort ) //endpoint
 		{
-			var result= await _productService.GetAllProductsAsync();
+
+			var result= await _productService.GetAllProductsAsync(sort);
 			return Ok(result);
 		}
 
