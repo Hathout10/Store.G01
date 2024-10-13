@@ -31,7 +31,7 @@ namespace Store.G01.Apis
 
 			builder.Services.AddScoped<IproductService, ProductService>();
 			builder.Services.AddScoped<IUnitOfWork, UniteOfWork>();
-			builder.Services.AddAutoMapper(m => m.AddProfile(new ProductProfile()));
+			builder.Services.AddAutoMapper(m => m.AddProfile(new ProductProfile(builder.Configuration)));
 
 			var app = builder.Build();
 
