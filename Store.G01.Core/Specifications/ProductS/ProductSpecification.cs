@@ -14,7 +14,7 @@ namespace Store.G01.Core.Specifications.ProductS
 			ApplyIncluds();
 
 		}
-		public ProductSpecification(string? sort, int? brandid, int? typeid) : base(
+		public ProductSpecification(string? sort, int? brandid, int? typeid,int pagesize, int pageindex) : base(
 			p =>
 			(!brandid.HasValue || brandid == p.BrandId)
 			&&
@@ -43,6 +43,11 @@ namespace Store.G01.Core.Specifications.ProductS
 			}
 			ApplyIncluds();
 
+			//900
+			//page size :50
+			//page index:3
+
+			ApplyPagination(pagesize*(pageindex-1),pagesize);
 
 		}
 

@@ -13,7 +13,7 @@ namespace Store.G01.Core.ServicesContract
 
 
 
-        Task<IEnumerable<ProductDto>> GetAllProductsAsync(string? sort,int? brandid,int? typeid);
+        Task<IEnumerable<ProductDto>> GetAllProductsAsync(string? sort,int? brandid,int? typeid,int? pagesize,int? pageindex);
         Task<IEnumerable<TypeBrandDto>> GetAllTypesAsync();
         Task<IEnumerable<TypeBrandDto>> GetAllBrandsAsync();
         Task<ProductDto> GetProductsByIdAsync(int id);

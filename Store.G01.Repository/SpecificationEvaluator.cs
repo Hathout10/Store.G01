@@ -30,6 +30,15 @@ namespace Store.G01.Repository
 				query = query.OrderByDescending(spec.OrderByDesc);
 			}
 
+			if(spec.IsPaginationEnable)
+			{
+				query = query.Skip(spec.Skip).Take(spec.Take);
+			}
+
+
+
+
+
 			query = spec.Include.Aggregate(query, (current, include) => current.Include(include));
 
 			return query;
