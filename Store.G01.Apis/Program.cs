@@ -1,4 +1,5 @@
 
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Store.G01.Core.Mapping.Products;
 using Store.G01.Core.RepostitoriesContract;
@@ -16,6 +17,7 @@ namespace Store.G01.Apis
 		{
 			var builder = WebApplication.CreateBuilder(args);
 
+
 			// Add services to the container.
 
 			builder.Services.AddControllers();
@@ -27,10 +29,9 @@ namespace Store.G01.Apis
 			{
 				options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 			});
-
 			builder.Services.AddScoped<IproductService, ProductService>();
 			builder.Services.AddScoped<IUnitOfWork, UniteOfWork>();
-			builder.Services.AddAutoMapper(m => m.AddProfile(new ProductProfile()));
+			builder.Services.AddAutoMapper(m => m.AddProfile(new ProductProfile(builder.Configuration)));
 
 			var app = builder.Build();
 
@@ -57,7 +58,7 @@ namespace Store.G01.Apis
 
 
 			#endregion
-
+			app.UseStaticFiles();
 
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())
