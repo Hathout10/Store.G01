@@ -14,17 +14,22 @@ namespace Store.G01.Core.Specifications.ProductS
 			ApplyIncluds();
 
 		}
-        public ProductSpecification(string? sort)
-        {
-			if(!string.IsNullOrEmpty(sort))
+		public ProductSpecification(string? sort, int? brandid, int? typeid) : base(
+			p =>
+			(!brandid.HasValue || brandid == p.BrandId)
+			&&
+			(!typeid.HasValue || typeid == p.TypeId)
+			)
+		{
+			if (!string.IsNullOrEmpty(sort))
 			{
 				switch (sort.ToLower())
 				{
 					case "priceasc":
-						AddOrderBy( p=>p.Price);
+						AddOrderBy(p => p.Price);
 						break;
 					case "pricedesc":
-						AddOrderByDescinding( p=>p.Price);
+						AddOrderByDescinding(p => p.Price);
 						break;
 					default:
 						AddOrderBy(p => p.Name);
@@ -41,7 +46,7 @@ namespace Store.G01.Core.Specifications.ProductS
 
 		}
 
-        private void ApplyIncluds()
+		private void ApplyIncluds()
 		{
 			Include.Add(p => p.Brand);
 			Include.Add(p => p.Type);
