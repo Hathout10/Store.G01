@@ -15,6 +15,9 @@ namespace Store.G01.Core.RepostitoriesContract
 		Task<IEnumerable<TEntity>> GetAllWithSpecAsync(ISpecifications<TEntity, TKey> spec);
 		Task<TEntity> GetWithSpecAsync(ISpecifications<TEntity, TKey> spec);
 		Task AddAsync(TEntity entity);
+
+		Task<int> GetCountAsync(ISpecifications<TEntity,TKey> entity);
+
 		void Update(TEntity entity);
 		void Delete(TEntity entity);
 
