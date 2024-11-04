@@ -4,9 +4,7 @@ using Store.G01.Core.ServicesContract;
 
 namespace Store.G01.Apis.Controllers
 {
-	[Route("api/[controller]")]
-	[ApiController]
-	public class ProductController : ControllerBase
+	public class ProductController : BaseApiController
 	{
 		private readonly IproductService _productService;
 
@@ -16,7 +14,7 @@ namespace Store.G01.Apis.Controllers
 		}
 
         [HttpGet] //Get BaseUrl/api/Products
-		public async Task<IActionResult> GetAllProducts() //endpoint
+		public async Task<ActionResult<>> GetAllProducts() //endpoint
 		{
 			var result= await _productService.GetAllProductsAsync();
 			return Ok(result);
