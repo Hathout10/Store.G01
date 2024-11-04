@@ -1,6 +1,7 @@
 
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+
+using Microsoft.AspNetCore.Builder;
+
 using Microsoft.EntityFrameworkCore;
 using Store.G01.Apis.Error;
 using Store.G01.Apis.Helper;
@@ -21,14 +22,18 @@ namespace Store.G01.Apis
 		{
 			var builder = WebApplication.CreateBuilder(args);
 
+
 			// Add services to the container.
 
 			builder.Services.AddDependency(builder.Configuration);
 
 
+			var app = builder.Build();
+
 			
 
 		
+
 
 			var app = builder.Build();
 
