@@ -1,6 +1,11 @@
 
+
 using Microsoft.AspNetCore.Builder;
+
 using Microsoft.EntityFrameworkCore;
+using Store.G01.Apis.Error;
+using Store.G01.Apis.Helper;
+using Store.G01.Apis.Middlewares;
 using Store.G01.Core.Mapping.Products;
 using Store.G01.Core.RepostitoriesContract;
 using Store.G01.Core.ServicesContract;
@@ -20,60 +25,16 @@ namespace Store.G01.Apis
 
 			// Add services to the container.
 
-			builder.Services.AddControllers();
-			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-			builder.Services.AddEndpointsApiExplorer();
-			builder.Services.AddSwaggerGen();
+			builder.Services.AddDependency(builder.Configuration);
 
-			builder.Services.AddDbContext<StoreDbContext>(options =>
-			{
-				options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-			});
-			builder.Services.AddScoped<IproductService, ProductService>();
-			builder.Services.AddScoped<IUnitOfWork, UniteOfWork>();
-			builder.Services.AddAutoMapper(m => m.AddProfile(new ProductProfile(builder.Configuration)));
 
 			var app = builder.Build();
 
-			#region Update Database
-
-			using var scope = app.Services.CreateScope();
-			var services = scope.ServiceProvider;
-
-			var context = services.GetRequiredService<StoreDbContext>();
-			var loggerFactory = services.GetRequiredService<ILoggerFactory>();
-			try
-			{
-				await context.Database.MigrateAsync();
-				await StoreDbContextSeed.SeedAsync(context);
-			}
-			catch (Exception ex)
-			{
-				var logger = loggerFactory.CreateLogger<Program>();
-				logger.LogError(ex, ex.Message);
-			}
-
-			//StoreDbContext context = new StoreDbContext();
-			//context.Database.MigrateAsync();  //update Database
 
 
-			#endregion
-			app.UseStaticFiles();
-
-			// Configure the HTTP request pipeline.
-			if (app.Environment.IsDevelopment())
-			{
-				app.UseSwagger();
-				app.UseSwaggerUI();
-			}
-			app.UseHttpsRedirection();
-
-			app.UseAuthorization();
+			await app.ConfigureMiddleWares();
 
 
-			app.MapControllers();
-
-			app.Run();
 		}
 	}
 }
