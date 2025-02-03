@@ -1,14 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
 using Store.G01.Apis.Error;
+using Store.G01.Core.Entites.identity;
 using Store.G01.Core.Mapping.Basket;
 using Store.G01.Core.Mapping.Products;
 using Store.G01.Core.RepostitoriesContract;
 using Store.G01.Core.ServicesContract;
 using Store.G01.Repository;
 using Store.G01.Repository.Data.Contexts;
+using Store.G01.Repository.Identity.Contexts;
 using Store.G01.Repository.Repositores;
+using Store.G01.Service.Serveices.Caches;
 using Store.G01.Service.Serveices.Products;
 
 namespace Store.G01.Apis.Helper
@@ -25,6 +30,7 @@ namespace Store.G01.Apis.Helper
 			services.AddAutoMapperServece(configuration);
 			services.ConfigureInvalidModelStateResponseServece();
 			services.AddRedisServece(configuration);
+			services.AddIdentityServece();
 
 			return services;
 		}
@@ -56,6 +62,11 @@ namespace Store.G01.Apis.Helper
 			{
 				options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
 			});
+			
+			services.AddDbContext<StoreIdentityDbContext>(options =>
+			{
+				options.UseSqlServer(configuration.GetConnectionString("IdentityConnection"));
+			});
 
 
 			return services;
@@ -66,6 +77,7 @@ namespace Store.G01.Apis.Helper
 
 			services.AddScoped<IproductService, ProductService>();
 			services.AddScoped<IUnitOfWork, UniteOfWork>();
+			services.AddScoped<IcacheService, CacheService>();
 			services.AddScoped<IBasketRepository, BasketRepository>();
 
 
@@ -119,6 +131,16 @@ namespace Store.G01.Apis.Helper
 
 			return services;
 		}
+
+		public static IServiceCollection AddIdentityServece(this IServiceCollection services)
+		{
+
+			services.AddIdentity<AppUser, IdentityRole>()
+					.AddEntityFrameworkStores<StoreIdentityDbContext>();
+
+			return services;
+		}
+
 
 	}
 }
