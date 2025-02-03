@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Store.G01.Repository.Data.Configrations
 {
-	internal class ProductConfigrations : IEntityTypeConfiguration<Product>
+	public class ProductConfigrations : IEntityTypeConfiguration<Product>
 	{
 		public void Configure(EntityTypeBuilder<Product> builder)
 		{

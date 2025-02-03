@@ -3,6 +3,10 @@ using Store.G01.Apis.Middlewares;
 using Store.G01.Repository.Data.Contexts;
 using Store.G01.Repository.Data;
 using Microsoft.EntityFrameworkCore;
+using Store.G01.Repository.Identity.Contexts;
+using Store.G01.Repository.Identity;
+using Microsoft.AspNetCore.Identity;
+using Store.G01.Core.Entites.identity;
 
 namespace Store.G01.Apis.Helper
 {
@@ -17,11 +21,17 @@ namespace Store.G01.Apis.Helper
 			var services = scope.ServiceProvider;
 
 			var context = services.GetRequiredService<StoreDbContext>();
+			var identitycontext = services.GetRequiredService<StoreIdentityDbContext>();
+			var userManager = services.GetRequiredService<UserManager<AppUser>>();
 			var loggerFactory = services.GetRequiredService<ILoggerFactory>();
 			try
 			{
 				await context.Database.MigrateAsync();
 				await StoreDbContextSeed.SeedAsync(context);
+
+				await identitycontext.Database.MigrateAsync();
+				await StoreIdentityDbContextSeed.SeedAppUserAsync(userManager);
+
 			}
 			catch (Exception ex)
 			{
